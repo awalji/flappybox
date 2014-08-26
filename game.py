@@ -41,6 +41,9 @@ class FlappyBox(Sprite):
         self.rect.centery = 240
         self.rect.left = 60
 
+    def update(self):
+        self.rect.bottom += 3
+
 fbox = FlappyBox()
 
 class Ground(Sprite):
