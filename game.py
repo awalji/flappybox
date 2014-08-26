@@ -6,6 +6,7 @@ from pygame.constants import QUIT
 from pygame.time import Clock
 from pygame import Surface, display
 from pygame.sprite import Sprite, RenderUpdates
+from random import randrange
 
 SCREEN_RES = (640, 480)
 
@@ -67,6 +68,16 @@ sprites = RenderUpdates(fbox, ground)
 
 pipe_timer = 0
 
+def spawn_pipes():
+    global pipe_timer
+    pipe_gap = randrange(95, 325)
+    top_pipe = Pipe()
+    top_pipe.rect.bottom = pipe_gap - 90
+    bottom_pipe = Pipe()
+    bottom_pipe.rect.top = pipe_gap + 90
+    pipe_timer = 0
+    sprites.add(top_pipe, bottom_pipe)
+
 while True:
 
     sprites.clear(screen, background)
@@ -79,12 +90,7 @@ while True:
     pipe_timer += clock.tick(60)
 
     if pipe_timer >= PIPE_RATE:
-        top_pipe = Pipe()
-        top_pipe.rect.bottom = 150
-        bottom_pipe = Pipe()
-        bottom_pipe.rect.top = 330
-        pipe_timer = 0
-        sprites.add(top_pipe, bottom_pipe)
+        spawn_pipes()
 
     sprites.update()
 
