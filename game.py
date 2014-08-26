@@ -32,6 +32,7 @@ background.fill(SKY_BLUE)
 
 screen.blit(background, background.get_rect())
 
+
 class FlappyBox(Sprite):
     def __init__(self):
         Sprite.__init__(self)
@@ -49,6 +50,7 @@ class FlappyBox(Sprite):
 
 fbox = FlappyBox()
 
+
 class Ground(Sprite):
     def __init__(self):
         Sprite.__init__(self)
@@ -58,6 +60,7 @@ class Ground(Sprite):
         self.rect.bottom = 480
 
 ground = Ground()
+
 
 class Pipe(Sprite):
     def __init__(self):
@@ -74,6 +77,7 @@ sprites = RenderUpdates(fbox, ground)
 
 pipe_timer = 0
 
+
 def spawn_pipes():
     global pipe_timer
     pipe_gap = randrange(95, 325)
@@ -84,9 +88,11 @@ def spawn_pipes():
     pipe_timer = 0
     sprites.add(top_pipe, bottom_pipe)
 
+
 def collisions_detected():
     sprites_collided = [s for s in spritecollide(fbox, sprites, False) if s is not fbox]
     return len(sprites_collided) > 0
+
 
 def end_game():
     print("You Hit Something!!!")
@@ -117,11 +123,3 @@ while True:
     sprites.draw(screen)
 
     display.flip()
-
-
-
-
-
-
-
-
