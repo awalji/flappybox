@@ -2,7 +2,7 @@ __author__ = 'awalji'
 
 import sys
 import pygame
-from pygame.constants import QUIT
+from pygame.constants import QUIT, KEYUP, K_SPACE
 from pygame.time import Clock
 from pygame import Surface, display
 from pygame.sprite import Sprite, RenderUpdates, spritecollide
@@ -43,6 +43,9 @@ class FlappyBox(Sprite):
 
     def update(self):
         self.rect.bottom += 3
+
+    def flap(self):
+        self.rect.bottom -= 45
 
 fbox = FlappyBox()
 
@@ -96,6 +99,10 @@ while True:
 
         if event.type == QUIT:
             sys.exit()
+
+        if event.type == KEYUP and event.key == K_SPACE:
+            fbox.flap()
+
 
     pipe_timer += clock.tick(60)
 
