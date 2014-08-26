@@ -14,6 +14,9 @@ SKY_BLUE = (135, 206, 250)
 
 TANGERINE = (255, 204, 0)
 
+PALE_GOLDENROD = (238, 232, 170)
+
+
 pygame.init()
 
 screen = display.set_mode(SCREEN_RES)
@@ -37,6 +40,18 @@ class FlappyBox(Sprite):
 
 fbox = FlappyBox()
 screen.blit(fbox.image, fbox.rect)
+
+
+class Ground(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.image = Surface((640, 60))
+        self.rect = self.image.get_rect()
+        self.image.fill(PALE_GOLDENROD)
+        self.rect.bottom = 480
+
+ground = Ground()
+screen.blit(ground.image, ground.rect)
 
 while True:
 
