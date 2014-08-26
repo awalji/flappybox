@@ -32,6 +32,8 @@ class FlappyBox(Sprite):
         self.image = Surface((30, 30))
         self.rect = self.image.get_rect()
         self.image.fill(TANGERINE)
+        self.rect.centery = 240
+        self.rect.left = 60
 
 fbox = FlappyBox()
 screen.blit(fbox.image, fbox.rect)
