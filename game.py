@@ -5,7 +5,7 @@ import pygame
 from pygame.constants import QUIT
 from pygame.time import Clock
 from pygame import Surface, display
-from pygame.sprite import Sprite, RenderUpdates
+from pygame.sprite import Sprite, RenderUpdates, spritecollide
 from random import randrange
 
 SCREEN_RES = (640, 480)
@@ -78,6 +78,13 @@ def spawn_pipes():
     pipe_timer = 0
     sprites.add(top_pipe, bottom_pipe)
 
+def collisions_detected():
+    sprites_collided = [s for s in spritecollide(fbox, sprites, False) if s is not fbox]
+    return len(sprites_collided) > 0
+
+def end_game():
+    print("You Hit Something!!!")
+
 while True:
 
     sprites.clear(screen, background)
@@ -94,9 +101,14 @@ while True:
 
     sprites.update()
 
+    if collisions_detected():
+        end_game()
+
     sprites.draw(screen)
 
     display.flip()
+
+
 
 
 
