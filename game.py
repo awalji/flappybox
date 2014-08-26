@@ -5,11 +5,14 @@ import pygame
 from pygame.constants import QUIT
 from pygame.time import Clock
 from pygame import Surface, display
+from pygame.sprite import Sprite
 
 
 SCREEN_RES = (640, 480)
 
 SKY_BLUE = (135, 206, 250)
+
+TANGERINE = (255, 204, 0)
 
 pygame.init()
 
@@ -23,6 +26,15 @@ background.fill(SKY_BLUE)
 
 screen.blit(background, background.get_rect())
 
+class FlappyBox(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.image = Surface((30, 30))
+        self.rect = self.image.get_rect()
+        self.image.fill(TANGERINE)
+
+fbox = FlappyBox()
+screen.blit(fbox.image, fbox.rect)
 
 while True:
 
