@@ -10,13 +10,13 @@ from pygame import Surface, display
 from pygame.sprite import Sprite, RenderUpdates, spritecollide
 from random import randrange
 
-SCREEN_RES = (640, 480)
+SCREEN_RES = (480, 640)
 
 SKY_BLUE = (135, 206, 250)
 
 TANGERINE = (255, 204, 0)
 
-PALE_GOLDENROD = (238, 232, 170)
+TAN = (238, 207, 161)
 
 KELLY_GREEN = (76, 187, 23)
 
@@ -38,10 +38,10 @@ screen.blit(background, background.get_rect())
 class FlappyBox(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = Surface((30, 30))
+        self.image = Surface((35, 35))
         self.rect = self.image.get_rect()
         self.image.fill(TANGERINE)
-        self.rect.centery = 240
+        self.rect.centery = SCREEN_RES[0]/2
         self.rect.left = 60
 
     def update(self):
@@ -56,10 +56,10 @@ fbox = FlappyBox()
 class Ground(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = Surface((640, 60))
+        self.image = Surface((SCREEN_RES[0], 60))
         self.rect = self.image.get_rect()
-        self.image.fill(PALE_GOLDENROD)
-        self.rect.bottom = 480
+        self.image.fill(TAN)
+        self.rect.bottom = SCREEN_RES[1]
 
 ground = Ground()
 
@@ -67,10 +67,10 @@ ground = Ground()
 class Pipe(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = Surface((60, 480))
+        self.image = Surface((60, SCREEN_RES[1]))
         self.rect = self.image.get_rect()
         self.image.fill(KELLY_GREEN)
-        self.rect.left = 640
+        self.rect.left = SCREEN_RES[0]
 
     def update(self):
         self.rect.left -= 1
@@ -82,7 +82,7 @@ pipe_timer = 0
 
 def spawn_pipes():
     global pipe_timer
-    pipe_gap = randrange(95, 325)
+    pipe_gap = randrange(95, SCREEN_RES[1]-60-5-90)
     top_pipe = Pipe()
     top_pipe.rect.bottom = pipe_gap - 90
     bottom_pipe = Pipe()
@@ -110,7 +110,6 @@ while True:
 
         if event.type == KEYUP and event.key == K_SPACE:
             fbox.flap()
-
 
     pipe_timer += clock.tick(60)
 
