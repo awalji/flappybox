@@ -7,7 +7,7 @@ import pygame
 from pygame.constants import QUIT, KEYUP, K_SPACE
 from pygame.time import Clock
 from pygame import Surface, display
-from pygame.sprite import Sprite, RenderUpdates, spritecollide
+from pygame.sprite import Sprite, OrderedUpdates, spritecollide
 from random import randrange
 
 SCREEN_RES = (480, 640)
@@ -85,7 +85,7 @@ class Pipe(Sprite):
     def update(self, ticks):
         self.rect.left -= 3
 
-sprites = RenderUpdates(fbox, ground)
+sprites = OrderedUpdates(fbox, ground)
 
 pipe_timer = 0
 
