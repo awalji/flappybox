@@ -22,6 +22,8 @@ KELLY_GREEN = (76, 187, 23)
 
 PIPE_RATE = 1750
 
+MAX_VELOCITY = 650
+
 pygame.init()
 
 screen = display.set_mode(SCREEN_RES)
@@ -43,12 +45,20 @@ class FlappyBox(Sprite):
         self.image.fill(TANGERINE)
         self.rect.centery = SCREEN_RES[0]/2
         self.rect.left = 60
+        self.vy = 0
+        self.ay = MAX_VELOCITY * 4
 
-    def update(self):
-        self.rect.bottom += 4.5
+    def update(self, ticks):
+        t = ticks / 1000.0
+        self.vy += self.ay * t
+        if self.vy > MAX_VELOCITY:
+            self.vy = MAX_VELOCITY
+        elif self.vy < -MAX_VELOCITY:
+            self.vy = -MAX_VELOCITY
+        self.rect.bottom += self.vy * t
 
     def flap(self):
-        self.rect.bottom -= 65
+        self.vy -= MAX_VELOCITY
 
 fbox = FlappyBox()
 
@@ -72,7 +82,7 @@ class Pipe(Sprite):
         self.image.fill(KELLY_GREEN)
         self.rect.left = SCREEN_RES[0]
 
-    def update(self):
+    def update(self, ticks):
         self.rect.left -= 3
 
 sprites = RenderUpdates(fbox, ground)
@@ -111,12 +121,14 @@ while True:
         if event.type == KEYUP and event.key == K_SPACE:
             fbox.flap()
 
-    pipe_timer += clock.tick(60)
+    ticks = clock.tick(60)
+
+    pipe_timer += ticks
 
     if pipe_timer >= PIPE_RATE:
         spawn_pipes()
 
-    sprites.update()
+    sprites.update(ticks)
 
     if collisions_detected():
         end_game()
