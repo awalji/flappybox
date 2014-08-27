@@ -20,7 +20,7 @@ TAN = (238, 207, 161)
 
 KELLY_GREEN = (76, 187, 23)
 
-PIPE_RATE = 4000
+PIPE_RATE = 1750
 
 pygame.init()
 
@@ -45,10 +45,10 @@ class FlappyBox(Sprite):
         self.rect.left = 60
 
     def update(self):
-        self.rect.bottom += 3
+        self.rect.bottom += 4.5
 
     def flap(self):
-        self.rect.bottom -= 45
+        self.rect.bottom -= 65
 
 fbox = FlappyBox()
 
@@ -67,13 +67,13 @@ ground = Ground()
 class Pipe(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        self.image = Surface((60, SCREEN_RES[1]))
+        self.image = Surface((100, SCREEN_RES[1]))
         self.rect = self.image.get_rect()
         self.image.fill(KELLY_GREEN)
         self.rect.left = SCREEN_RES[0]
 
     def update(self):
-        self.rect.left -= 1
+        self.rect.left -= 3
 
 sprites = RenderUpdates(fbox, ground)
 
