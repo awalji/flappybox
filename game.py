@@ -47,6 +47,13 @@ class FlappyBox(Sprite):
         self.rect.left = 60
         self.vy = 0
         self.ay = MAX_VELOCITY * 4
+        self.images = {'up': None, 'mid': None, 'down': None}
+        for key in self.images.keys():
+            self.images[key] = pygame.image.load("images/fb-%s.png" % key)
+        self.animation_order = ['up', 'mid', 'down', 'mid']
+        self.animation_index = 0
+        self.image = self.images[self.animation_order[self.animation_index]]
+        self.update_counter = 0
 
     def update(self, ticks):
         t = ticks / 1000.0
@@ -56,6 +63,11 @@ class FlappyBox(Sprite):
         elif self.vy < -MAX_VELOCITY:
             self.vy = -MAX_VELOCITY
         self.rect.bottom += self.vy * t
+        if self.update_counter % 10 == 0:
+            self.animation_index = (self.animation_index + 1) % len(self.animation_order)
+            self.image = self.images[self.animation_order[self.animation_index]]
+        self.update_counter += 1
+
 
     def flap(self):
         self.vy -= MAX_VELOCITY
