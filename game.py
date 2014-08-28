@@ -96,6 +96,8 @@ class Pipe(Sprite):
 
     def update(self, ticks):
         self.rect.left -= 3
+        if self.rect.right < 0:
+            sprites.remove(self)
 
 sprites = OrderedUpdates(fbox, ground)
 
