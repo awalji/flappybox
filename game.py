@@ -58,19 +58,18 @@ class FlappyBox(Sprite):
         self.update_counter = 0
 
     def update(self, ticks):
-        if not game_over:
-            t = ticks / 1000.0
-            self.vy += self.ay * t
-            if self.vy > MAX_VELOCITY:
-                self.vy = MAX_VELOCITY
-            elif self.vy < -MAX_VELOCITY:
-                self.vy = -MAX_VELOCITY
-            self.rect.bottom += self.vy * t
-            if self.update_counter % 10 == 0:
-                self.animation_index = (self.animation_index + 1) % len(self.animation_order)
-                self.image = self.images[self.animation_order[self.animation_index]]
-            self.update_counter += 1
-        
+        t = ticks / 1000.0
+        self.vy += self.ay * t
+        if self.vy > MAX_VELOCITY:
+            self.vy = MAX_VELOCITY
+        elif self.vy < -MAX_VELOCITY:
+            self.vy = -MAX_VELOCITY
+        self.rect.bottom += self.vy * t
+        if self.update_counter % 10 == 0:
+            self.animation_index = (self.animation_index + 1) % len(self.animation_order)
+            self.image = self.images[self.animation_order[self.animation_index]]
+        self.update_counter += 1
+
     def flap(self):
         self.vy -= MAX_VELOCITY
 
@@ -100,12 +99,12 @@ class Pipe(Sprite):
         if not game_over:
             self.rect.left -= 3
             if self.rect.right < 0:
-                sprites.remove(self)
+                bg_sprites.remove(self)
 
-sprites = OrderedUpdates(fbox, ground)
+bg_sprites = OrderedUpdates(ground)
+fg_sprites = OrderedUpdates(fbox)
 
 pipe_timer = 0
-
 
 def spawn_pipes():
     global pipe_timer
@@ -115,11 +114,11 @@ def spawn_pipes():
     bottom_pipe = Pipe()
     bottom_pipe.rect.top = pipe_gap + 90
     pipe_timer = 0
-    sprites.add(top_pipe, bottom_pipe)
+    bg_sprites.add(top_pipe, bottom_pipe)
 
 
 def collisions_detected():
-    sprites_collided = [s for s in spritecollide(fbox, sprites, False) if s is not fbox]
+    sprites_collided = [s for s in spritecollide(fbox, bg_sprites, False) if s is not fbox]
     return len(sprites_collided) > 0
 
 
@@ -130,14 +129,15 @@ def end_game():
 
 while True:
 
-    sprites.clear(screen, background)
+    bg_sprites.clear(screen, background)
+    fg_sprites.clear(screen, background)
 
     for event in pygame.event.get():
 
         if event.type == QUIT:
             sys.exit()
 
-        if event.type == KEYUP and event.key == K_SPACE:
+        if not game_over and event.type == KEYUP and event.key == K_SPACE:
             fbox.flap()
 
     ticks = clock.tick(60)
@@ -147,11 +147,13 @@ while True:
     if not game_over and pipe_timer >= PIPE_RATE:
         spawn_pipes()
 
-    sprites.update(ticks)
+    bg_sprites.update(ticks)
+    fg_sprites.update(ticks)
 
     if not game_over and collisions_detected():
         end_game()
 
-    sprites.draw(screen)
+    bg_sprites.draw(screen)
+    fg_sprites.draw(screen)
 
     display.flip()
