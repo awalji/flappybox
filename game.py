@@ -31,9 +31,7 @@ screen = display.set_mode(SCREEN_RES)
 
 clock = Clock()
 
-background = Surface(SCREEN_RES)
-
-background.fill(SKY_BLUE)
+background = pygame.image.load("images/background.png")
 
 screen.blit(background, background.get_rect())
 
