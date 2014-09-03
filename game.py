@@ -9,6 +9,7 @@ from pygame.time import Clock
 from pygame import Surface, display
 from pygame.sprite import Sprite, OrderedUpdates, spritecollide
 from random import randrange
+from pygame.transform import flip
 
 SCREEN_RES = (480, 640)
 
@@ -89,11 +90,12 @@ ground = Ground()
 
 
 class Pipe(Sprite):
-    def __init__(self):
+    def __init__(self, top=False):
         Sprite.__init__(self)
-        self.image = Surface((100, SCREEN_RES[1]))
+        self.image = pygame.image.load("images/pipe.png")
+        if top:
+            self.image = flip(self.image, False, True)
         self.rect = self.image.get_rect()
-        self.image.fill(KELLY_GREEN)
         self.rect.left = SCREEN_RES[0]
 
     def update(self, ticks):
@@ -110,7 +112,7 @@ pipe_timer = 0
 def spawn_pipes():
     global pipe_timer
     pipe_gap = randrange(95, SCREEN_RES[1]-60-5-90)
-    top_pipe = Pipe()
+    top_pipe = Pipe(True)
     top_pipe.rect.bottom = pipe_gap - 90
     bottom_pipe = Pipe()
     bottom_pipe.rect.top = pipe_gap + 90
