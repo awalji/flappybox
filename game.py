@@ -36,6 +36,8 @@ background.fill(SKY_BLUE)
 
 screen.blit(background, background.get_rect())
 
+game_over = False
+
 
 class FlappyBox(Sprite):
     def __init__(self):
@@ -56,19 +58,19 @@ class FlappyBox(Sprite):
         self.update_counter = 0
 
     def update(self, ticks):
-        t = ticks / 1000.0
-        self.vy += self.ay * t
-        if self.vy > MAX_VELOCITY:
-            self.vy = MAX_VELOCITY
-        elif self.vy < -MAX_VELOCITY:
-            self.vy = -MAX_VELOCITY
-        self.rect.bottom += self.vy * t
-        if self.update_counter % 10 == 0:
-            self.animation_index = (self.animation_index + 1) % len(self.animation_order)
-            self.image = self.images[self.animation_order[self.animation_index]]
-        self.update_counter += 1
-
-
+        if not game_over:
+            t = ticks / 1000.0
+            self.vy += self.ay * t
+            if self.vy > MAX_VELOCITY:
+                self.vy = MAX_VELOCITY
+            elif self.vy < -MAX_VELOCITY:
+                self.vy = -MAX_VELOCITY
+            self.rect.bottom += self.vy * t
+            if self.update_counter % 10 == 0:
+                self.animation_index = (self.animation_index + 1) % len(self.animation_order)
+                self.image = self.images[self.animation_order[self.animation_index]]
+            self.update_counter += 1
+        
     def flap(self):
         self.vy -= MAX_VELOCITY
 
@@ -95,9 +97,10 @@ class Pipe(Sprite):
         self.rect.left = SCREEN_RES[0]
 
     def update(self, ticks):
-        self.rect.left -= 3
-        if self.rect.right < 0:
-            sprites.remove(self)
+        if not game_over:
+            self.rect.left -= 3
+            if self.rect.right < 0:
+                sprites.remove(self)
 
 sprites = OrderedUpdates(fbox, ground)
 
@@ -121,7 +124,9 @@ def collisions_detected():
 
 
 def end_game():
+    global game_over
     print("You Hit Something!!!")
+    game_over = True
 
 while True:
 
@@ -139,12 +144,12 @@ while True:
 
     pipe_timer += ticks
 
-    if pipe_timer >= PIPE_RATE:
+    if not game_over and pipe_timer >= PIPE_RATE:
         spawn_pipes()
 
     sprites.update(ticks)
 
-    if collisions_detected():
+    if not game_over and collisions_detected():
         end_game()
 
     sprites.draw(screen)
