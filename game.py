@@ -9,7 +9,7 @@ from pygame.time import Clock
 from pygame import Surface, display
 from pygame.sprite import Sprite, OrderedUpdates, spritecollide
 from random import randrange
-from pygame.transform import flip
+from pygame.transform import flip, rotate
 
 SCREEN_RES = (480, 640)
 
@@ -55,6 +55,7 @@ class FlappyBox(Sprite):
         self.animation_index = 0
         self.image = self.images[self.animation_order[self.animation_index]]
         self.update_counter = 0
+        self.rotation = 0
 
     def update(self, ticks):
         if not self.rect.colliderect(ground.rect):
@@ -69,6 +70,12 @@ class FlappyBox(Sprite):
             self.animation_index = (self.animation_index + 1) % len(self.animation_order)
             self.image = self.images[self.animation_order[self.animation_index]]
         self.update_counter += 1
+        if game_over and self.rotation > -90:
+            self.rotation -= 5
+        self.image = rotate(self.images[self.animation_order[self.animation_index]], self.rotation)
+
+
+
 
     def flap(self):
         self.vy -= MAX_VELOCITY
