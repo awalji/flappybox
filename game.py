@@ -58,13 +58,14 @@ class FlappyBox(Sprite):
         self.update_counter = 0
 
     def update(self, ticks):
-        t = ticks / 1000.0
-        self.vy += self.ay * t
-        if self.vy > MAX_VELOCITY:
-            self.vy = MAX_VELOCITY
-        elif self.vy < -MAX_VELOCITY:
-            self.vy = -MAX_VELOCITY
-        self.rect.bottom += self.vy * t
+        if not self.rect.colliderect(ground.rect):
+            t = ticks / 1000.0
+            self.vy += self.ay * t
+            if self.vy > MAX_VELOCITY:
+                self.vy = MAX_VELOCITY
+            elif self.vy < -MAX_VELOCITY:
+                self.vy = -MAX_VELOCITY
+            self.rect.bottom += self.vy * t
         if self.update_counter % 10 == 0:
             self.animation_index = (self.animation_index + 1) % len(self.animation_order)
             self.image = self.images[self.animation_order[self.animation_index]]
