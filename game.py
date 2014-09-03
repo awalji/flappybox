@@ -128,8 +128,9 @@ def spawn_pipes():
 
 
 def collisions_detected():
-    sprites_collided = [s for s in spritecollide(fbox, bg_sprites, False) if s is not fbox]
-    return len(sprites_collided) > 0
+    sprites_collided = [s for s in spritecollide(fbox, bg_sprites, False)]
+    ground_collided = [s for s in spritecollide(fbox, fg_sprites, False) if s is not fbox]
+    return len(sprites_collided + ground_collided) > 0
 
 
 def end_game():
