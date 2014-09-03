@@ -116,11 +116,13 @@ pipe_timer = 0
 
 def spawn_pipes():
     global pipe_timer
-    pipe_gap = randrange(95, SCREEN_RES[1]-60-5-90)
+    pipe_gap = 180
+    flange_padding = 45
+    pipe_gap_center = randrange((pipe_gap/2)+flange_padding, SCREEN_RES[1]-ground.rect.height-flange_padding-(pipe_gap/2))
     top_pipe = Pipe(True)
-    top_pipe.rect.bottom = pipe_gap - 90
+    top_pipe.rect.bottom = pipe_gap_center - (pipe_gap/2)
     bottom_pipe = Pipe()
-    bottom_pipe.rect.top = pipe_gap + 90
+    bottom_pipe.rect.top = pipe_gap_center + (pipe_gap/2)
     pipe_timer = 0
     bg_sprites.add(top_pipe, bottom_pipe)
 
