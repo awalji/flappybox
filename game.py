@@ -104,8 +104,8 @@ class Pipe(Sprite):
             if self.rect.right < 0:
                 bg_sprites.remove(self)
 
-bg_sprites = OrderedUpdates(ground)
-fg_sprites = OrderedUpdates(fbox)
+bg_sprites = OrderedUpdates()
+fg_sprites = OrderedUpdates(ground, fbox)
 
 pipe_timer = 0
 
