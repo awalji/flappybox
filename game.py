@@ -3,13 +3,15 @@
 __author__ = 'awalji'
 
 import sys
+from random import randrange
+
 import pygame
 from pygame.constants import QUIT, KEYUP, K_SPACE
 from pygame.time import Clock
 from pygame import Surface, display
 from pygame.sprite import Sprite, OrderedUpdates, spritecollide
-from random import randrange
 from pygame.transform import flip, rotate
+
 
 SCREEN_RES = (480, 640)
 
@@ -20,6 +22,8 @@ TANGERINE = (255, 204, 0)
 TAN = (238, 207, 161)
 
 KELLY_GREEN = (76, 187, 23)
+
+BLACK = (0,0,0)
 
 PIPE_RATE = 1750
 
@@ -136,6 +140,9 @@ def collisions_detected():
 def end_game():
     global game_over
     print("You Hit Something!!!")
+    font = pygame.font.Font(None ,50)
+    text = font.render("Game over", True, BLACK)
+    screen.blit(text, [150, 250])
     game_over = True
 
 def reset_game():
@@ -146,6 +153,7 @@ def reset_game():
     bg_sprites.empty()
     pipe_timer = 0
     game_over = False
+    screen.blit(background, (0,0))
 
 while True:
 
