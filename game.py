@@ -138,6 +138,15 @@ def end_game():
     print("You Hit Something!!!")
     game_over = True
 
+def reset_game():
+    global fbox, pipe_timer, game_over
+    fg_sprites.remove(fbox)
+    fbox = FlappyBox()
+    fg_sprites.add(fbox)
+    bg_sprites.empty()
+    pipe_timer = 0
+    game_over = False
+
 while True:
 
     bg_sprites.clear(screen, background)
@@ -148,8 +157,11 @@ while True:
         if event.type == QUIT:
             sys.exit()
 
-        if not game_over and event.type == KEYUP and event.key == K_SPACE:
-            fbox.flap()
+        if event.type == KEYUP and event.key == K_SPACE:
+            if not game_over:
+                fbox.flap()
+            else:
+                reset_game()
 
     ticks = clock.tick(60)
 
