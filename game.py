@@ -140,9 +140,6 @@ def collisions_detected():
 def end_game():
     global game_over
     print("You Hit Something!!!")
-    font = pygame.font.Font(None ,50)
-    text = font.render("Game over", True, BLACK)
-    screen.blit(text, [150, 250])
     game_over = True
 
 def reset_game():
@@ -159,6 +156,7 @@ while True:
 
     bg_sprites.clear(screen, background)
     fg_sprites.clear(screen, background)
+    screen.blit(background, [150, 250])
 
     for event in pygame.event.get():
 
@@ -186,5 +184,10 @@ while True:
 
     bg_sprites.draw(screen)
     fg_sprites.draw(screen)
+
+    if game_over:
+        font = pygame.font.Font(None ,50)
+        text = font.render("Game over", True, BLACK)
+        screen.blit(text, [150, 250])
 
     display.flip()
