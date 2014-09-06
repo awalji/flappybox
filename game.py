@@ -98,6 +98,17 @@ class Ground(Sprite):
 ground = Ground()
 
 
+class GameOverText(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        font = pygame.font.Font(None, 50)
+        self.image = font.render("Game Over", True, BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = background.get_rect().centerx
+        self.rect.centery = background.get_rect().centery
+
+game_over_text = GameOverText()
+
 class Pipe(Sprite):
     def __init__(self, top=False):
         Sprite.__init__(self)
@@ -115,6 +126,7 @@ class Pipe(Sprite):
 
 bg_sprites = OrderedUpdates()
 fg_sprites = OrderedUpdates(ground, fbox)
+text_sprites = OrderedUpdates()
 
 pipe_timer = 0
 
@@ -139,7 +151,7 @@ def collisions_detected():
 
 def end_game():
     global game_over
-    print("You Hit Something!!!")
+    text_sprites.add(game_over_text)
     game_over = True
 
 def reset_game():
@@ -150,13 +162,13 @@ def reset_game():
     bg_sprites.empty()
     pipe_timer = 0
     game_over = False
-    screen.blit(background, (0,0))
+    text_sprites.remove(game_over_text)
 
 while True:
 
     bg_sprites.clear(screen, background)
     fg_sprites.clear(screen, background)
-    screen.blit(background, [150, 250])
+    text_sprites.clear(screen, background)
 
     for event in pygame.event.get():
 
@@ -184,10 +196,6 @@ while True:
 
     bg_sprites.draw(screen)
     fg_sprites.draw(screen)
-
-    if game_over:
-        font = pygame.font.Font(None ,50)
-        text = font.render("Game over", True, BLACK)
-        screen.blit(text, [150, 250])
+    text_sprites.draw(screen)
 
     display.flip()
