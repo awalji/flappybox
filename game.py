@@ -27,6 +27,8 @@ BLACK = (0,0,0)
 
 PIPE_RATE = 1750
 
+SCROLL_RATE = 3
+
 MAX_VELOCITY = 650
 
 pygame.init()
@@ -89,8 +91,20 @@ class Ground(Sprite):
         Sprite.__init__(self)
         self.image = Surface((SCREEN_RES[0], 60))
         self.rect = self.image.get_rect()
-        self.image.fill(TAN)
+        self.ground_image = pygame.image.load("images/ground.png").convert()
         self.rect.bottom = SCREEN_RES[1]
+        self.boundary = SCREEN_RES[0]
+        self.left_rect = self.image.get_rect()
+        self.right_rect = self.image.get_rect()
+
+        self.update()
+
+    def update(self, *args):
+        if not game_over:
+            self.boundary = (self.boundary - SCROLL_RATE) % SCREEN_RES[0]
+            self.left_rect.right = self.right_rect.left = self.boundary
+            self.image.blit(self.ground_image, self.left_rect)
+            self.image.blit(self.ground_image, self.right_rect)
 
 ground = Ground()
 
@@ -118,7 +132,7 @@ class Pipe(Sprite):
 
     def update(self, ticks):
         if not game_over:
-            self.rect.left -= 3
+            self.rect.left -= SCROLL_RATE
             if self.rect.right < 0:
                 bg_sprites.remove(self)
 
