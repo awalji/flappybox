@@ -35,7 +35,7 @@ screen = display.set_mode(SCREEN_RES)
 
 clock = Clock()
 
-background = pygame.image.load("images/background.png")
+background = pygame.image.load("images/background.png").convert()
 
 screen.blit(background, background.get_rect())
 
@@ -54,7 +54,7 @@ class FlappyBox(Sprite):
         self.ay = MAX_VELOCITY * 4
         self.images = {'up': None, 'mid': None, 'down': None}
         for key in self.images.keys():
-            self.images[key] = pygame.image.load("images/fb-%s.png" % key)
+            self.images[key] = pygame.image.load("images/fb-%s.png" % key).convert_alpha()
         self.animation_order = ['up', 'mid', 'down', 'mid']
         self.animation_index = 0
         self.image = self.images[self.animation_order[self.animation_index]]
@@ -109,10 +109,11 @@ class GameOverText(Sprite):
 
 game_over_text = GameOverText()
 
+
 class Pipe(Sprite):
     def __init__(self, top=False):
         Sprite.__init__(self)
-        self.image = pygame.image.load("images/pipe.png")
+        self.image = pygame.image.load("images/pipe.png").convert_alpha()
         if top:
             self.image = flip(self.image, False, True)
         self.rect = self.image.get_rect()
