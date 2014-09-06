@@ -78,9 +78,6 @@ class FlappyBox(Sprite):
             self.rotation -= 5
         self.image = rotate(self.images[self.animation_order[self.animation_index]], self.rotation)
 
-
-
-
     def flap(self):
         self.vy -= MAX_VELOCITY
 
@@ -131,6 +128,7 @@ text_sprites = OrderedUpdates()
 
 pipe_timer = 0
 
+
 def spawn_pipes():
     global pipe_timer
     pipe_gap = 180
@@ -154,6 +152,7 @@ def end_game():
     global game_over
     text_sprites.add(game_over_text)
     game_over = True
+
 
 def reset_game():
     global fbox, pipe_timer, game_over
