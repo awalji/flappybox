@@ -17,12 +17,6 @@ SCREEN_RES = (480, 640)
 
 SKY_BLUE = (135, 206, 250)
 
-TANGERINE = (255, 204, 0)
-
-TAN = (238, 207, 161)
-
-KELLY_GREEN = (76, 187, 23)
-
 BLACK = (0,0,0)
 
 PIPE_RATE = 1750
@@ -49,7 +43,6 @@ class FlappyBox(Sprite):
         Sprite.__init__(self)
         self.image = Surface((35, 35))
         self.rect = self.image.get_rect()
-        self.image.fill(TANGERINE)
         self.rect.centery = SCREEN_RES[0]/2
         self.rect.left = 60
         self.vy = 0
