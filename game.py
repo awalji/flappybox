@@ -174,10 +174,12 @@ def spawn_pipes():
     pipe_pairs.append((top_pipe, bottom_pipe))
 
 
+def ground_collided():
+    return len([s for s in spritecollide(fbox, fg_sprites, False) if s is not fbox]) > 0
+
 def collisions_detected():
-    sprites_collided = [s for s in spritecollide(fbox, bg_sprites, False)]
-    ground_collided = [s for s in spritecollide(fbox, fg_sprites, False) if s is not fbox]
-    return len(sprites_collided + ground_collided) > 0
+    sprites_collided = len([s for s in spritecollide(fbox, bg_sprites, False)]) > 0
+    return sprites_collided or ground_collided()
 
 def detect_pipe_entry():
     global pipes_entered
@@ -224,7 +226,7 @@ while True:
         if event.type == KEYUP and event.key == K_SPACE:
             if not game_over:
                 fbox.flap()
-            else:
+            elif ground_collided():
                 reset_game()
 
     ticks = clock.tick(60)
