@@ -71,6 +71,8 @@ class FlappyBox(Sprite):
             elif self.vy < -MAX_VELOCITY:
                 self.vy = -MAX_VELOCITY
             self.rect.bottom += self.vy * t
+            if self.rect.bottom < 0:
+                self.rect.bottom = 0
         if self.update_counter % 10 == 0:
             self.animation_index = (self.animation_index + 1) % len(self.animation_order)
             self.image = self.images[self.animation_order[self.animation_index]]
