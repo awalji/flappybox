@@ -39,6 +39,10 @@ game_over = False
 
 score = 0
 
+pipe_pairs = []
+
+pipes_entered = []
+
 
 class FlappyBox(Sprite):
     def __init__(self):
@@ -118,8 +122,10 @@ game_over_text = GameOverText()
 class ScoreText(Sprite):
     def __init__(self):
         Sprite.__init__(self)
-        font = pygame.font.Font(None, 50)
-        self.image = font.render(str(score), True, BLACK)
+        self.font = pygame.font.Font(None, 50)
+
+    def update(self, ticks):
+        self.image = self.font.render(str(score), True, BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = background.get_rect().centerx
         self.rect.centery = background.get_rect().centery - 150
@@ -137,10 +143,13 @@ class Pipe(Sprite):
         self.rect.left = SCREEN_RES[0]
 
     def update(self, ticks):
+        global pipe_pairs
         if not game_over:
             self.rect.left -= SCROLL_RATE
             if self.rect.right < 0:
                 bg_sprites.remove(self)
+                pipe_pairs = [pair for pair in pipe_pairs if self not in pair]
+
 
 bg_sprites = OrderedUpdates()
 fg_sprites = OrderedUpdates(ground, fbox)
@@ -160,6 +169,7 @@ def spawn_pipes():
     bottom_pipe.rect.top = pipe_gap_center + (pipe_gap/2)
     pipe_timer = 0
     bg_sprites.add(top_pipe, bottom_pipe)
+    pipe_pairs.append((top_pipe, bottom_pipe))
 
 
 def collisions_detected():
@@ -167,6 +177,17 @@ def collisions_detected():
     ground_collided = [s for s in spritecollide(fbox, fg_sprites, False) if s is not fbox]
     return len(sprites_collided + ground_collided) > 0
 
+def detect_pipe_entry():
+    global pipes_entered
+    entries = [pair for pair in pipe_pairs if fbox.rect.right > pair[0].rect.left and fbox.rect.right <= pair[0].rect.right and not pair in pipes_entered]
+    pipes_entered += entries
+
+def compute_score():
+    global score, pipes_entered
+    for pair in pipes_entered:
+        if fbox.rect.left > pair[0].rect.right:
+            score += 1
+            pipes_entered.remove(pair)
 
 def end_game():
     global game_over
@@ -175,12 +196,14 @@ def end_game():
 
 
 def reset_game():
-    global fbox, pipe_timer, game_over, score
+    global fbox, pipe_timer, game_over, score, pipes_entered, pipe_pairs
     fg_sprites.remove(fbox)
     fbox = FlappyBox()
     fg_sprites.add(fbox)
     bg_sprites.empty()
     pipe_timer = 0
+    pipes_entered = []
+    pipe_pairs = []
     game_over = False
     score = 0
     text_sprites.remove(game_over_text)
@@ -211,6 +234,10 @@ while True:
 
     bg_sprites.update(ticks)
     fg_sprites.update(ticks)
+    text_sprites.update(ticks)
+
+    detect_pipe_entry()
+    compute_score()
 
     if not game_over and collisions_detected():
         end_game()
