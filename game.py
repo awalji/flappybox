@@ -37,6 +37,8 @@ screen.blit(background, background.get_rect())
 
 game_over = False
 
+score = 0
+
 
 class FlappyBox(Sprite):
     def __init__(self):
@@ -113,6 +115,17 @@ class GameOverText(Sprite):
 
 game_over_text = GameOverText()
 
+class ScoreText(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        font = pygame.font.Font(None, 50)
+        self.image = font.render(str(score), True, BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = background.get_rect().centerx
+        self.rect.centery = background.get_rect().centery - 150
+
+score_text = ScoreText()
+
 
 class Pipe(Sprite):
     def __init__(self, top=False):
@@ -131,7 +144,7 @@ class Pipe(Sprite):
 
 bg_sprites = OrderedUpdates()
 fg_sprites = OrderedUpdates(ground, fbox)
-text_sprites = OrderedUpdates()
+text_sprites = OrderedUpdates(score_text)
 
 pipe_timer = 0
 
@@ -162,13 +175,14 @@ def end_game():
 
 
 def reset_game():
-    global fbox, pipe_timer, game_over
+    global fbox, pipe_timer, game_over, score
     fg_sprites.remove(fbox)
     fbox = FlappyBox()
     fg_sprites.add(fbox)
     bg_sprites.empty()
     pipe_timer = 0
     game_over = False
+    score = 0
     text_sprites.remove(game_over_text)
 
 while True:
