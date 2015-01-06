@@ -43,6 +43,8 @@ pipe_pairs = []
 
 pipes_entered = []
 
+game_started = False
+
 
 class FlappyBox(Sprite):
     def __init__(self):
@@ -63,7 +65,7 @@ class FlappyBox(Sprite):
         self.rotation = 0
 
     def update(self, ticks):
-        if not self.rect.colliderect(ground.rect):
+        if game_started and not self.rect.colliderect(ground.rect):
             t = ticks / 1000.0
             self.vy += self.ay * t
             if self.vy > MAX_VELOCITY:
@@ -200,7 +202,7 @@ def end_game():
 
 
 def reset_game():
-    global fbox, pipe_timer, game_over, score, pipes_entered, pipe_pairs
+    global fbox, pipe_timer, game_over, score, pipes_entered, pipe_pairs, game_started
     fg_sprites.remove(fbox)
     fbox = FlappyBox()
     fg_sprites.add(fbox)
@@ -211,6 +213,7 @@ def reset_game():
     game_over = False
     score = 0
     text_sprites.remove(game_over_text)
+    game_started = False
 
 while True:
 
@@ -226,6 +229,8 @@ while True:
         if event.type == KEYUP and event.key == K_SPACE:
             if not game_over:
                 fbox.flap()
+                if not game_started:
+                    game_started = True
             elif ground_collided():
                 reset_game()
 
@@ -233,7 +238,7 @@ while True:
 
     pipe_timer += ticks
 
-    if not game_over and pipe_timer >= PIPE_RATE:
+    if not game_over and game_started and pipe_timer >= PIPE_RATE:
         spawn_pipes()
 
     bg_sprites.update(ticks)
