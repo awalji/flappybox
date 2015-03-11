@@ -153,7 +153,7 @@ class TopScoreText(Sprite):
         self.update(0)
 
     def update(self, ticks):
-        if top_score:
+        if top_score is not None:
             text = str(top_score)
         else:
             text = ""
