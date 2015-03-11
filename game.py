@@ -18,7 +18,8 @@ SCREEN_RES = (480, 640)
 
 SKY_BLUE = (135, 206, 250)
 
-BLACK = (0,0,0)
+BLACK = (0, 0, 0)
+GRAY = (230, 230, 230)
 
 PIPE_RATE = 1750
 
@@ -157,7 +158,7 @@ class TopScoreText(Sprite):
             text = str(top_score)
         else:
             text = ""
-        self.image = self.font.render(text, True, BLACK)
+        self.image = self.font.render(text, True, GRAY)
         self.rect = self.image.get_rect()
         self.rect.centerx = background.get_rect().centerx
         self.rect.centery = background.get_rect().centery - 200
@@ -185,7 +186,7 @@ class Pipe(Sprite):
 
 bg_sprites = OrderedUpdates()
 fg_sprites = OrderedUpdates(ground, fbox)
-text_sprites = OrderedUpdates(score_text)
+text_sprites = OrderedUpdates(top_score_text, score_text)
 
 pipe_timer = 0
 
@@ -229,7 +230,6 @@ def compute_score():
 
 def end_game():
     global game_over
-    text_sprites.add(top_score_text)
     text_sprites.add(game_over_text)
     game_over = True
     update_top_score()
@@ -252,7 +252,6 @@ def reset_game():
     pipe_pairs = []
     game_over = False
     score = 0
-    text_sprites.remove(top_score_text)
     text_sprites.remove(game_over_text)
     game_started = False
 
