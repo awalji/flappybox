@@ -12,7 +12,9 @@ from pygame import Surface, display
 from pygame.sprite import Sprite, OrderedUpdates, spritecollide
 from pygame.transform import flip, rotate
 from math import sin, pi
+from os.path import expanduser
 
+TOP_SCORE_FILENAME = expanduser("~/.fbtopscore")
 
 SCREEN_RES = (480, 640)
 
@@ -239,6 +241,18 @@ def update_top_score():
     global top_score
     if score > top_score:
         top_score = score
+        with open(TOP_SCORE_FILENAME, "w") as top_score_file:
+            top_score_file.write(str(top_score))
+
+
+def read_top_score():
+    global top_score
+    try:
+        with open(TOP_SCORE_FILENAME, "r") as top_score_file:
+            top_score = int(top_score_file.readline())
+            print top_score
+    except IOError:
+        pass
 
 
 def reset_game():
@@ -254,6 +268,8 @@ def reset_game():
     score = 0
     text_sprites.remove(game_over_text)
     game_started = False
+
+read_top_score()
 
 while True:
 
