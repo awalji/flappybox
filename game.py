@@ -68,7 +68,6 @@ class FlappyBox(Sprite):
         self.rotation = 0
         self.wiggle_time = 0
 
-
     def update(self, ticks):
         if not game_started and not game_over:
             self.wiggle_time += (ticks / 1000.0) % (2*pi)
@@ -208,14 +207,17 @@ def spawn_pipes():
 def ground_collided():
     return len([s for s in spritecollide(fbox, fg_sprites, False) if s is not fbox]) > 0
 
+
 def collisions_detected():
     sprites_collided = len([s for s in spritecollide(fbox, bg_sprites, False)]) > 0
     return sprites_collided or ground_collided()
+
 
 def detect_pipe_entry():
     global pipes_entered
     entries = [pair for pair in pipe_pairs if fbox.rect.right > pair[0].rect.left and fbox.rect.right <= pair[0].rect.right and not pair in pipes_entered]
     pipes_entered += entries
+
 
 def compute_score():
     global score, pipes_entered
