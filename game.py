@@ -86,7 +86,7 @@ class FlappyBox(Sprite):
             self.animation_index = (self.animation_index + 1) % len(self.animation_order)
             self.image = self.images[self.animation_order[self.animation_index]]
         self.update_counter += 1
-        if game_over and self.rotation > -90:
+        if game_over and not ground_collided() and self.rotation > -90:
             self.rotation -= 5
         self.image = rotate(self.images[self.animation_order[self.animation_index]], self.rotation)
 
