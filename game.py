@@ -11,6 +11,7 @@ from pygame.time import Clock
 from pygame import Surface, display
 from pygame.sprite import Sprite, OrderedUpdates, spritecollide
 from pygame.transform import flip, rotate
+from math import sin, pi
 
 
 SCREEN_RES = (480, 640)
@@ -63,8 +64,15 @@ class FlappyBox(Sprite):
         self.image = self.images[self.animation_order[self.animation_index]]
         self.update_counter = 0
         self.rotation = 0
+        self.wiggle_time = 0
+
 
     def update(self, ticks):
+        if not game_started and not game_over:
+            self.wiggle_time += (ticks / 1000.0) % (2*pi)
+            v = 2 * sin(6*self.wiggle_time)
+            print v
+            self.rect.bottom += v
         if game_started and not self.rect.colliderect(ground.rect):
             t = ticks / 1000.0
             self.vy += self.ay * t
