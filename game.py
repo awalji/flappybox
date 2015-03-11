@@ -226,9 +226,12 @@ def compute_score():
 
 def end_game():
     global game_over
+    global top_score
     text_sprites.add(top_score_text)
     text_sprites.add(game_over_text)
     game_over = True
+    if score > top_score:
+        top_score = score
 
 
 def reset_game():
