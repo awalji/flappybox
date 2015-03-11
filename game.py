@@ -40,6 +40,8 @@ game_over = False
 
 score = 0
 
+top_score = None
+
 pipe_pairs = []
 
 pipes_entered = []
@@ -130,6 +132,7 @@ class GameOverText(Sprite):
 
 game_over_text = GameOverText()
 
+
 class ScoreText(Sprite):
     def __init__(self):
         Sprite.__init__(self)
@@ -142,6 +145,25 @@ class ScoreText(Sprite):
         self.rect.centery = background.get_rect().centery - 150
 
 score_text = ScoreText()
+
+
+class TopScoreText(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.font = pygame.font.Font(None, 50)
+        self.update(0)
+
+    def update(self, ticks):
+        if top_score:
+            text = str(top_score)
+        else:
+            text = ""
+        self.image = self.font.render(text, True, BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = background.get_rect().centerx
+        self.rect.centery = background.get_rect().centery - 200
+
+top_score_text = TopScoreText()
 
 
 class Pipe(Sprite):
@@ -204,6 +226,7 @@ def compute_score():
 
 def end_game():
     global game_over
+    text_sprites.add(top_score_text)
     text_sprites.add(game_over_text)
     game_over = True
 
@@ -219,6 +242,7 @@ def reset_game():
     pipe_pairs = []
     game_over = False
     score = 0
+    text_sprites.remove(top_score_text)
     text_sprites.remove(game_over_text)
     game_started = False
 
