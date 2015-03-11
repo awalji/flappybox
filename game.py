@@ -70,9 +70,8 @@ class FlappyBox(Sprite):
     def update(self, ticks):
         if not game_started and not game_over:
             self.wiggle_time += (ticks / 1000.0) % (2*pi)
-            v = 2 * sin(6*self.wiggle_time)
-            print v
-            self.rect.bottom += v
+            v = 8 * sin(6*self.wiggle_time)
+            self.rect.bottom = SCREEN_RES[0]/2 + v
         if game_started and not self.rect.colliderect(ground.rect):
             t = ticks / 1000.0
             self.vy += self.ay * t
